@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback, useReducer } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,32 @@ import * as FiltersActions from "../store/actions/filters";
 import Colors from "../constants/Colors";
 import Card from "../components/UI/Card";
 import FilterItem from "../components/course/FilterItem";
+import Input from "../components/UI/Input";
+
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues,
+    };
+  }
+  return state;
+};
 
 const FiltersScreen = (props) => {
   const params = useSelector((state) => state.params.params);
@@ -33,6 +59,14 @@ const FiltersScreen = (props) => {
         language: selectedLanguage === "-1" ? undefined : selectedLanguage,
         country: selectedCountry === "-1" ? undefined : selectedCountry,
         price: selectedPrice === "-1" ? undefined : selectedPrice,
+        minCost:
+          formState.inputValues.minCost === ""
+            ? undefined
+            : formState.inputValues.minCost,
+        maxCost:
+          formState.inputValues.maxCost === ""
+            ? undefined
+            : formState.inputValues.maxCost,
       })
     );
     props.navigation.goBack();
@@ -43,15 +77,60 @@ const FiltersScreen = (props) => {
     props.navigation.goBack();
   };
 
-  const onChange = (min, max) => {
-    console.log("Max: ", max);
-    console.log("Min: ", min);
-  };
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      minCost: "",
+      maxCost: "",
+    },
+    inputValidities: {
+      description: false,
+      isCompleted: false,
+    },
+    formIsValid: false,
+  });
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Card style={styles.pickers}>
         <ScrollView>
+          <View style={styles.form}>
+            <Input
+              id="minCost"
+              label="Минимальная стоимость($)"
+              placeholder="Укажите минимальное значение"
+              errorText="Проверьте комментарий!"
+              keyboardType="number-pad"
+              onInputChange={inputChangeHandler}
+              initialValue={""}
+              initiallyValid={false}
+              styles={{ marginBottom: 15 }}
+            />
+          </View>
+          <View style={styles.form}>
+            <Input
+              id="maxCost"
+              label="Максимальная стоимость($)"
+              placeholder="Укажите максимальное значения"
+              errorText="Проверьте значение!"
+              keyboardType="number-pad"
+              onInputChange={inputChangeHandler}
+              initialValue={""}
+              initiallyValid={false}
+              styles={{ marginBottom: 15, marginTop: -30 }}
+            />
+          </View>
           <FilterItem
             label={"Выберите направление"}
             data={params.subjects}
@@ -59,7 +138,7 @@ const FiltersScreen = (props) => {
             setValue={setSelectedSubject}
           />
           <FilterItem
-            label={"Выберите язык обученияяя"}
+            label={"Выберите язык обучения"}
             data={params.languages}
             value={selectedLanguage}
             setValue={setSelectedLanguage}
@@ -70,13 +149,6 @@ const FiltersScreen = (props) => {
             value={selectedCountry}
             setValue={setSelectedCountries}
           />
-          <FilterItem
-            label={"Выберите стоимость"}
-            data={params.prices}
-            value={selectedPrice}
-            setValue={setSelectedPrice}
-          />
-          <TextInput {...props} style={styles.input} />
 
           <View style={styles.buttonContainer}>
             <View style={{ width: "80%", paddingBottom: 15 }}>
@@ -102,6 +174,11 @@ const FiltersScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
+  form: {
+    margin: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
   label: {
     fontFamily: "open-sans-bold",
     fontSize: 15,

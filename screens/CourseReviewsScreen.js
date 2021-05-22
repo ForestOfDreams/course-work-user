@@ -1,20 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import {
-  StyleSheet,
-  FlatList,
-  View,
-  Text,
-  Button,
-  ActivityIndicator,
-} from "react-native";
-import { useSelector, useDispatch } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { StyleSheet, FlatList } from "react-native";
 
 import ReviewItem from "../components/course/ReviewItem";
 import * as reviewsActions from "../store/actions/reviews";
-
-import HeaderButton from "../components/UI/HeaderButton";
-import Colors from "../constants/Colors";
 
 const ReviewsScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);

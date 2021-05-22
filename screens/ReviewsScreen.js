@@ -7,6 +7,7 @@ import {
   Button,
   ActivityIndicator,
 } from "react-native";
+
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -17,6 +18,19 @@ import HeaderButton from "../components/UI/HeaderButton";
 import Colors from "../constants/Colors";
 
 const ReviewsScreen = (props) => {
+  const dispatch = useDispatch();
+  const loadUser = useCallback(async () => {
+    setError(null);
+    setIsRefreshing(true);
+    try {
+      await dispatch(profileActions.fetchUser());
+    } catch (err) {}
+  }, [dispatch]);
+
+  useEffect(() => {
+    loadUser;
+  }, [loadUser]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
@@ -24,8 +38,6 @@ const ReviewsScreen = (props) => {
   // Извлекаем курсы из state. state передается в функцию автоматически.
 
   const reviews = useSelector((state) => state.reviews.reviews);
-
-  const dispatch = useDispatch();
 
   const loadReviews = useCallback(async () => {
     setError(null);
@@ -55,13 +67,6 @@ const ReviewsScreen = (props) => {
     [dispatch],
     loadReviews
   );
-
-  // const selectItemHandler = (id, title) => {
-  //   props.navigation.navigate("CourseDetail", {
-  //     courseId: id,
-  //     courseTitle: title,
-  //   });
-  // };
 
   if (error) {
     return (
@@ -104,11 +109,8 @@ const ReviewsScreen = (props) => {
             author={itemData.item.author.username}
             score={itemData.item.score}
             textcomment={itemData.item.textcomment}
-            onViewDetail={() =>
-              selectItemHandler(itemData.item.id, itemData.item.title)
-            }
-            onDeleteFavorite={() => {
-              dispatch(reviewsActions.removeFromFavorite(itemData.item.name));
+            onDeleteReview={() => {
+              dispatch(reviewsActions.removeReviews(itemData.item.review_id));
             }}
           />
         );

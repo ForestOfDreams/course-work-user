@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -20,7 +20,7 @@ const StartupScreen = (props) => {
 
   useEffect(() => {
     const tryLogin = async () => {
-      const userData = await AsyncStorage.getItem("userData");
+      const userData = await SecureStore.getItemAsync("userData");
 
       if (!userData) {
         dispatch(authActions.setDidTryAL());

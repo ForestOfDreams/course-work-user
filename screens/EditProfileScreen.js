@@ -71,7 +71,7 @@ const EditProfileScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("Возникла ошибка!", error, [{ text: "Okay" }]);
+      Alert.alert("Возникла ошибка!", error, [{ text: "Ок" }]);
     }
   }, [error]);
 

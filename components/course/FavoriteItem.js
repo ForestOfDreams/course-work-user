@@ -21,7 +21,7 @@ const FavoriteItem = (props) => {
   return (
     <View style={styles.course}>
       <View style={styles.touchable}>
-        <TouchableCmp onPress={props.onViewDetail} useForeground>
+        <TouchableCmp onPress={() => {}} useForeground>
           <View>
             <View style={styles.imageContainer}>
               <Image
@@ -36,7 +36,9 @@ const FavoriteItem = (props) => {
               <View style={styles.rowDetails}>
                 <View style={styles.descriptionContainer}>
                   <Ionicons name="ios-star" color="#777777" size={20} />
-                  <Text style={styles.rating}>{props.rating.toFixed(2)}</Text>
+                  {props.rating && (
+                    <Text style={styles.rating}>{props.rating.toFixed(2)}</Text>
+                  )}
                 </View>
                 <View style={styles.descriptionContainer}>
                   <Ionicons name="ios-location" color="#777777" size={20} />

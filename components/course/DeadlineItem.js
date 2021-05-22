@@ -22,7 +22,7 @@ const DeadlineItem = (props) => {
   return (
     <View style={styles.course}>
       <View style={styles.touchable}>
-        <TouchableCmp onPress={props.onViewDetail} useForeground>
+        <TouchableCmp onPress={() => {}} useForeground>
           <View>
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -53,11 +53,6 @@ const DeadlineItem = (props) => {
                   color={Colors.accent}
                   title={"Удалить"}
                   onPress={props.onDelete}
-                />
-                <Button
-                  color={Colors.accent}
-                  title={"Изменить"}
-                  onPress={props.onEdit}
                 />
               </View>
             </View>

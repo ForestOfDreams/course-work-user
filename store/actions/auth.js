@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import jwt_decode from "jwt-decode";
 
 export const AUTHENTICATE = "AUTHENTICATE";
@@ -130,7 +130,7 @@ export const login = (username, password) => {
 
 export const logout = () => {
   clearLogoutTimer();
-  AsyncStorage.removeItem("userData");
+  SecureStore.deleteItemAsync("userData");
   return { type: LOGOUT };
 };
 
@@ -149,7 +149,7 @@ const setLogoutTimer = (expirationTime) => {
 };
 
 const saveDataToStorage = (token, username, expirationDate) => {
-  AsyncStorage.setItem(
+  SecureStore.setItemAsync(
     "userData",
     JSON.stringify({
       token: token,

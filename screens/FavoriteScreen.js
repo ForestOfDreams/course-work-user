@@ -113,13 +113,16 @@ const FavoriteScreen = (props) => {
           <FavoriteItem
             image={itemData.item.imageUrl}
             title={itemData.item.name}
-            rating={itemData.item.price}
+            rating={itemData.item.rating}
             country={itemData.item.country}
             price={itemData.item.price}
             language={itemData.item.language}
             id={itemData.item.internship_id}
             onViewDetail={() =>
-              selectItemHandler(itemData.item.id, itemData.item.title)
+              selectItemHandler(
+                itemData.item.internship_id,
+                itemData.item.title
+              )
             }
             onDeleteFavorite={() => {
               dispatch(favoriteActions.removeFromFavorite(itemData.item.name));

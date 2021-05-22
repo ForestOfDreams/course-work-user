@@ -9,6 +9,8 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
+
+import * as ImagePicker from "expo-image-picker";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +21,38 @@ import * as authActions from "../store/actions/auth";
 import Card from "../components/UI/Card";
 
 const ProfileScreen = (props) => {
+  const [image, setImage] = useState(undefined);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      try {
+        await dispatch(profileActions.uploadImage(result));
+        setImage(result);
+      } catch (err) {
+        setError(err.message);
+      }
+    }
+  };
+
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
@@ -35,6 +69,8 @@ const ProfileScreen = (props) => {
     } catch (err) {
       setError(err.message);
     }
+    try {
+    } catch {}
     setIsRefreshing(false);
   }, [dispatch, setIsLoading, setError]);
 
@@ -66,16 +102,32 @@ const ProfileScreen = (props) => {
         <Card style={styles.user}>
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: "row", marginTop: 15 }}>
-              <Image
-                source={{
-                  uri: "https://cdn5.vectorstock.com/i/1000x1000/38/44/student-graduate-avatar-icon-vector-11983844.jpg",
-                }}
-                style={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: 40,
-                }}
-              />
+              <TouchableOpacity onPress={pickImage}>
+                {!image ? (
+                  <Image
+                    source={{
+                      uri: `https://internships-hse.herokuapp.com/api/students/${user.user_id}/image`,
+                    }}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 40,
+                    }}
+                  />
+                ) : (
+                  <Image
+                    source={{
+                      uri: image.uri,
+                    }}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 40,
+                    }}
+                  />
+                )}
+              </TouchableOpacity>
+              {/* <Button title="press" onPress={sumbitHandler} /> */}
               <View style={{ marginLeft: 20 }}>
                 <Text
                   style={[

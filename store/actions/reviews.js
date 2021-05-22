@@ -53,3 +53,23 @@ export const uploadReviews = (textcomment, score, internship_id) => {
     }
   };
 };
+
+export const removeReviews = (review_id) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const response = await fetch(
+      `https://internships-hse.herokuapp.com/reviews/${review_id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Something went wrong!");
+    }
+  };
+};

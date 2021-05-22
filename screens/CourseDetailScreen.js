@@ -88,7 +88,12 @@ const CourseDetailScreen = (props) => {
           <Text style={styles.rating}>{selectedCourse.language}</Text>
         </View>
       </View>
+
       <View style={{ marginBottom: 15, ...styles.rowDetails }}>
+        <View style={styles.descriptionContainer}>
+          <Ionicons name="ios-school" color="#777777" size={20} />
+          <Text style={styles.rating}>{selectedCourse.subject}</Text>
+        </View>
         <View style={styles.descriptionContainer}>
           <Ionicons name="ios-calendar" color="#777777" size={20} />
           <Text style={styles.rating}>{selectedCourse.startDate}</Text>

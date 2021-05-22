@@ -70,15 +70,13 @@ const AddDeadlineScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("An error occurred!", error, [{ text: "Okay" }]);
+      Alert.alert("Возникла ошибка!", error, [{ text: "Ок" }]);
     }
   }, [error]);
 
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
-      Alert.alert("Wrong input!", "Please check the errors in the form.", [
-        { text: "Okay" },
-      ]);
+      Alert.alert("Ошибка!", "Проверьте поля формы.", [{ text: "Ок" }]);
       return;
     }
     setError(null);

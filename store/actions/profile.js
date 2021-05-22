@@ -28,7 +28,6 @@ export const fetchUser = () => {
   };
 };
 
-//написать
 export const updateUser = (
   name,
   surname,
@@ -57,6 +56,69 @@ export const updateUser = (
           phone: phone,
           dayOfBirth: dayOfBirth,
         }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorResData = await response.json();
+      let message = "Something went wrong!";
+      throw new Error(message);
+    }
+  };
+};
+
+// const createFormData = (photo, body) => {
+//   (photo);
+//   const data = new FormData();
+//   data.append("file", {
+//     name: photo.fileName,
+//     type: photo.type,
+//     uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
+//   });
+
+//   Object.keys(body).forEach((key) => {
+//     data.append(key, body[key]);
+//   });
+
+//   return data;
+// };
+
+const createFormData = (image, body) => {
+  const data = new FormData();
+
+  data.append("file", {
+    uri:
+      Platform.OS === "android" ? image.uri : image.uri.replace("file://", ""),
+  });
+
+  Object.keys(body).forEach((key) => {
+    data.append(key, body[key]);
+  });
+
+  return data;
+};
+
+export const uploadImage = (image) => {
+  return async (dispatch, getState) => {
+    var photo = {
+      uri: image.uri,
+      type: "image/jpeg",
+      name: "photo.jpg",
+    };
+    var form = new FormData();
+    form.append("file", photo);
+    const token = getState().auth.token;
+    let response = await fetch(
+      `https://internships-hse.herokuapp.com/api/students/${
+        getState().profile.user.user_id
+      }/image`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: token,
+          "Content-Type": "multipart/form-data",
+        },
+        body: form,
       }
     );
 

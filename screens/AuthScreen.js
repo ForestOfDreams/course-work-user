@@ -74,7 +74,7 @@ const AuthScreen = (props) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert("Возникла ошибка!", error, [{ text: "Okay" }]);
+      Alert.alert("Возникла ошибка!", error, [{ text: "Ок" }]);
     }
   }, [error]);
 
@@ -150,7 +150,7 @@ const AuthScreen = (props) => {
                   minLength={6}
                   secureTextEntry
                   autoCapitalize="none"
-                  errorText="Пожалуйста введите корректный пароль."
+                  errorText="Усложните пароль"
                   onInputChange={inputChangeHandler}
                   initialValue=""
                 />
@@ -202,6 +202,7 @@ const AuthScreen = (props) => {
                   id="phone"
                   label="Телефон"
                   keyboardType="phone-pad"
+                  phone
                   required
                   autoCapitalize="none"
                   errorText="Пожалуйста введите корректный телефон."
@@ -240,9 +241,9 @@ const AuthScreen = (props) => {
                   placeholder="securepassord"
                   secureTextEntry
                   required
-                  minLength={3}
+                  minLength={0}
                   autoCapitalize="none"
-                  errorText="Please enter a valid password."
+                  errorText="Проверьте пароль"
                   onInputChange={inputChangeHandler}
                   initialValue=""
                 />

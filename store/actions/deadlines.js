@@ -1,3 +1,5 @@
+import { LogBox } from "react-native";
+
 export const FETCH_MY_DEADLINES = "FETCH_MY_DEADLINES";
 export const UPLOAD_DEADLINE = "UPLOAD_DEADLINE";
 
@@ -44,6 +46,7 @@ export const uploadDeadline = (
           "Content-Type": "application/json",
           Authorization: token,
         },
+
         body: JSON.stringify({
           description: description,
           isCompleted: isCompleted,

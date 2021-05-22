@@ -36,7 +36,7 @@ const CourseItem = (props) => {
               <View style={styles.rowDetails}>
                 <View style={styles.descriptionContainer}>
                   <Ionicons name="ios-star" color="#777777" size={20} />
-                  <Text style={styles.rating}>{props.rating.toFixed(2)}</Text>
+                  <Text style={styles.rating}>{props.rating}</Text>
                 </View>
                 <View style={styles.descriptionContainer}>
                   <Ionicons name="ios-location" color="#777777" size={20} />

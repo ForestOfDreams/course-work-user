@@ -21,6 +21,12 @@ export const fetchCourses = () => {
       if (params.filters.language) {
         url = url.concat("language:", params.filters.language, ",");
       }
+      if (params.filters.minCost) {
+        url = url.concat("price>", params.filters.minCost, ",");
+      }
+      if (params.filters.maxCost) {
+        url = url.concat("price<", params.filters.maxCost, ",");
+      }
       const response = await fetch(url, {
         method: "GET",
         headers: {
@@ -49,27 +55,11 @@ export const fetchCourses = () => {
             resData[key].price,
             resData[key].reviews,
             resData[key].startDate,
-            "https://media.makeameme.org/created/aim-for-horizontal-59d2d1.jpg",
-            9.8,
+            "",
+            resData[key].score,
             resData[key].subject
           )
         );
-
-        // new Course(
-        //   resData[key].checked,
-        //   "Россия",
-        //   "Кайф",
-        //   new Date(),
-        //   resData[key].internship_id,
-        //   "Русский",
-        //   "Вышка",
-        //   440000,
-        //   resData[key].reviews,
-        //   new Date(),
-        //   "https://www.hse.ru/data/2019/08/23/1536734213/20190823_2697-Pano-2.jpg",
-        //   9.8,
-        //   "Прога"
-        // )
       }
       dispatch({ type: SET_COURSES, courses: loadCourses });
     } catch (err) {

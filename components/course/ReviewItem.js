@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,15 @@ import {
   TouchableNativeFeedback,
   Platform,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+
+import * as profileActions from "../../store/actions/profile";
 import Colors from "../../constants/Colors";
 
 import { Ionicons } from "@expo/vector-icons";
 
 const ReviewItem = (props) => {
+  const user = useSelector((state) => state.profile.user.username);
   let TouchableCmp = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback;
@@ -22,7 +26,7 @@ const ReviewItem = (props) => {
   return (
     <View style={styles.course}>
       <View style={styles.touchable}>
-        <TouchableCmp onPress={props.onViewDetail} useForeground>
+        <TouchableCmp onPress={() => {}} useForeground>
           <View>
             <View style={styles.userInfoSection}>
               <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -37,20 +41,22 @@ const ReviewItem = (props) => {
                 <Text style={styles.rating}>{props.textcomment}</Text>
               </View>
             </View>
-            <View style={styles.actions}>
+            {props.author === user && (
               <View style={styles.actions}>
-                <Button
-                  color={Colors.accent}
-                  title={"Удалить"}
-                  onPress={props.onDelete}
-                />
-                <Button
-                  color={Colors.accent}
-                  title={"Изменить"}
-                  onPress={props.onEdit}
-                />
+                <View style={styles.actions}>
+                  <Button
+                    color={Colors.accent}
+                    title={"Удалить"}
+                    onPress={props.onDeleteReview}
+                  />
+                  <Button
+                    color={Colors.accent}
+                    title={"Изменить"}
+                    onPress={props.onEdit}
+                  />
+                </View>
               </View>
-            </View>
+            )}
           </View>
         </TouchableCmp>
       </View>
